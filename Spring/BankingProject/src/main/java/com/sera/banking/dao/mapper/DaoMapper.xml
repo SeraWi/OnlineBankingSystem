@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace ="com.sera.banking.dao.Dao">
+	
+	<!--  1. 계좌 사용가능한지 확인  select-->
+	<select id="selectAccount" resultType="int">
+		select count(*)
+		from user 
+		where userAccount = #{userAccount}; 
+	</select>
+	
+	<!-- 2. 계좌 생성, insert -->
+	<insert id="insertAccount">
+		insert into user(userName,userAccount,rate)
+		values(#{userName}, #{userAccount}, #{rate});
+	</insert>
+	
+	<!-- 3. 계좌 조회 select -->
+	<select id="selectAccountInfo" 
+			resultType= "com.sera.banking.domain.AccountInfo">
+		select * 
+		from user
+		where userAccount = #{userAccount};
+	</select>
+	
+	<!-- 4. userName에 해당하는 전체 계좌 정보 -->
+	<select id="selectAllAccount" 
+			resultType= "com.sera.banking.domain.AccountInfo">
+		select * 
+		from user
+		where userName = #{userName};
+	</select>
+	
+	<!-- 5. 입금 후 잔액 update -->
+	<update id="updateAfterDeposit">
+		update user
+		set balance = balance * (1+rate/100) + #{depositAmount}
+		where userAccount = #{userAccount} ;
+	</update>
+	
+	<!-- 6. 입금 후 입금내역 insert -->
+	<insert id="insertDepositInfo">
+		insert into deposit(userAccount, depositAmount)
+		values(#{userAccount}, #{depositAmount});
+	</insert>
+	
+
+
+</mapper>
