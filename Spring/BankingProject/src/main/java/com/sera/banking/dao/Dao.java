@@ -5,6 +5,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.sera.banking.domain.AccountInfo;
+import com.sera.banking.domain.DepositHistory;
+import com.sera.banking.domain.TransferHistory;
+import com.sera.banking.domain.WithdrawHistory;
 
 public interface Dao {
 	
@@ -27,11 +30,23 @@ public interface Dao {
 	// 6. 입금 후 입금내역 insert
 	void insertDepositInfo(@Param("userAccount")int userAccount, @Param("depositAmount") int depositAmount);
 	
-	//7. 출금 후 잔액 update
+	// 7. 출금 후 잔액 update
 	void updateAfterWithdrawal(@Param("userAccount")int userAccount, @Param("withdrawalAmount")int withdrawalAmount);
 
 	// 8. 출금 후 출금내역 insert
 	void insertWithdrawInfo(@Param("userAccount")int userAccount,@Param("withdrawalAmount") int withdrawalAmount);
+
+	// 9. 입금 내역 select
+	List<DepositHistory> selectDepositInfo(int userAccount);
+	
+	// 10. 출금 내역 select
+	List<WithdrawHistory> selectWithdrawInfo(int userAccount);
+	
+	// 11. 이체 내역 select
+	List<TransferHistory> selectTransferInfo(int userAccount);
+	
+	
+	
 	
 	
 	

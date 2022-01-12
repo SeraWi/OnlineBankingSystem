@@ -2,7 +2,7 @@ select * from transfer;
 select * from user;
 
 insert into transfer(fromAccount, toAccount, transferAmount)
-values(30915375,55650875,300);
+values(18831361,55650875,300);
 
 update user
 set balance = balance - 300
@@ -18,9 +18,18 @@ where userAccount =55650875;
 -- 입금 내역
 select *
 from deposit
-where userAccount = 30764194;
+where userAccount = 18831361;
 
+-- 출금 내역
+select *
+from withdraw
+where userAccount =18831361;
 
+-- 이체한 내역
+select t.toAccount, u.userName, t.transferAmount, t.transferDate
+from transfer t inner join user u
+on t.toAccount = u.userAccount
+where fromAccount = 18831361;
 
 
 

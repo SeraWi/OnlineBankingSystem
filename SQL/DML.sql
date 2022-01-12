@@ -102,8 +102,6 @@ from user
 where userAccount = 18831361;
 
 
-
-
 -- 이체하기
 -- 내 계좌와 보내는 계좌의 balance를 update 하기 + 이체 내역에 저장하기
 -- 내 계좌의 balance가 이체금 보다 작은경우실행한다.

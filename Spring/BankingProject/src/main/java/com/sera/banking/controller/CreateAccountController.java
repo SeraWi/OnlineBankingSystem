@@ -29,9 +29,6 @@ public class CreateAccountController {
 		
 		// 계좌를 생성하고 계좌 정보를 반환한다.
 		AccountInfo accountInfo = createService.createAccount(userName);
-//		
-//		System.out.println(accountInfo.toString());
-		
 	
 		model.addAttribute("accountInfo", accountInfo);
 		return "/openAccount";

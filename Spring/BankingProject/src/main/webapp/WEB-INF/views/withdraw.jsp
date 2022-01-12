@@ -12,7 +12,16 @@
 	
 		font-size: 25px;
 	}
-
+	
+	*{	
+		
+		font-size : 25px;
+	}
+	
+	body{
+		margin-top:50px;
+		margin-left: 70px;
+	}
 </style>
 </head>
 <body>
@@ -44,11 +53,11 @@
 	
 	<script>
 	
+	/* 출금하기 버튼 클릭 */
 	
 	$('#depositForm').on('click', 'input[type=button]', function(){
 		
-		/* var userAccount =$('input[type=hidden]', $(this).parent()).val(); */
-		
+		/* 출금하는 계좌, 출금액, 현재 잔고 정보 */
 		var userAccount =$('input[type=hidden]', $(this).parent()).attr("value1");
 		console.log(userAccount);
 		
@@ -57,6 +66,11 @@
 		
 		var balance= $('input[type=hidden]', $(this).parent()).attr("value2");
 		console.log(balance);
+		
+		/* 문자열 비교 막기 위해 문자를 숫자로 변환*/
+		userAccount = parseInt(userAccount);
+		withdrawalAmount = parseInt(withdrawalAmount);
+		balance = parseInt(balance);
 	
 		
 		/* 출금액과 잔고액 비교하기 */
@@ -71,7 +85,7 @@
 			return false;
 		}
 		
-
+	    /* 비동기 통신으로 출금하기 */
 		 $.ajax({
 			   url:'<c:url value="/afterWithdraw"/>',
 			   type:'POST',
@@ -102,7 +116,7 @@
 		   $('input[type=text]', $(this).parent()).val("");
 		   
 		
-	});
+	});/* click 끝 */
 	</script>
 	
 	

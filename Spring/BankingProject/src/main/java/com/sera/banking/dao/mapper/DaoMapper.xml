@@ -62,6 +62,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		values(#{userAccount},#{withdrawalAmount});
 	</insert>
 	
+	<!-- 9. 입금 내역 select  -->
+	<select id="selectDepositInfo"
+			resultType= "com.sera.banking.domain.DepositHistory"
+	>
+	select *
+	from deposit
+	where userAccount = #{userAccount};
+	</select>
+	
+	
+	
+	<!-- 10. 출금 내역 select  -->
+	<select id="selectWithdrawInfo"
+	resultType= "com.sera.banking.domain.WithdrawHistory"
+	>
+	select *
+	from withdraw
+	where userAccount = #{userAccount};
+	</select>
+	
+	
+	<!-- 11. 이체 내역 select  -->
+	<select id="selectTransferInfo"
+		resultType= "com.sera.banking.domain.TransferHistory"
+	>
+	select u.userAccount, u.userName, t.transferAmount, t.transferDate
+	from transfer t inner join user u
+	on t.toAccount = u.userAccount
+	where fromAccount = #{userAccount};
+	
+	</select>
 
 
 </mapper>

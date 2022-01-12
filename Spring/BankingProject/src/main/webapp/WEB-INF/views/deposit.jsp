@@ -12,7 +12,14 @@
 	
 		font-size: 25px;
 	}
-
+	
+	*{
+		font-size : 25px;
+	}
+	body{
+		margin-top:50px;
+		margin-left: 70px;
+	}
 </style>
 </head>
 <body>
@@ -45,14 +52,23 @@
 	
 	<script>
 	
+	/* 입금하기 클릭했을 때 */
 	
 	$('#depositForm').on('click', 'input[type=button]', function(){
 		
+		/* 입금하기 버튼을 클릭한 계좌번화 입금액 */
 		var userAccount =$('input[type=hidden]', $(this).parent()).val();
 		console.log(userAccount);
 		
 		var depositAmount = $('input[type=text]', $(this).parent()).val();
 		console.log(depositAmount);
+		
+		
+		
+		/* 문자열 숫자로 변환 */
+		userAccount = parseInt(userAccount);
+		depositAmount = parseInt(depositAmount);
+		
 		
 		/*  입금액 0원이나 입력하지 않았을 경우*/
 		if(!depositAmount){
@@ -63,7 +79,7 @@
 			return false;
 		}
 		
-	
+		/* 비동기 통신으로 입금하기 */
 		 $.ajax({
 			   url:'<c:url value="/afterDeposit"/>',
 			   type:'POST',
@@ -72,10 +88,11 @@
 				   depositAmount:depositAmount,
 			   },
 			   success: function(data){
-				   
+				   	   /* 비동기통신 성공, 입금 완료 */
 					   console.log(data);
 					   alert('입금이 완료되었습니다.')
 						
+					   /* 아래쪽에 입금 후 내용 추가 */
 						var html ='<div>';
 		                html += '   <h2>' + data.userName+'</h2>';
 		                html += '   <h2> 입금 계좌 : ' + data.userAccount+'</h2>';
@@ -94,7 +111,7 @@
 		   $('input[type=text]', $(this).parent()).val("");
 		   
 		
-	});
+	});/* button 클릭 끝 */
 	</script>
 	
 	
