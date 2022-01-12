@@ -22,10 +22,10 @@
 <ul>
 	<li><a href="<c:url value='/create/account'/>"> 계좌 생성 </a></li>
 	<li><a href="<c:url value='/search/account'/>"> 계좌 조회 </a></li>
-	<li><a href="<c:url value='/create/account'/>"> 이체 </a></li>
 	<li><a href="<c:url value='/deposit'/>"> 입금 </a></li>
-	<li><a href="<c:url value='/create/account'/>"> 출금 </a></li>
-	<li><a href="<c:url value='/create/account'/>"> 입금/출금/이체 내역보기 </a></li>
+	<li><a href="<c:url value='/withdraw'/>"> 출금 </a></li>
+	<li><a href="<c:url value='/transfer'/>"> 이체 </a></li>
+	<li><a href="<c:url value='/history'/>"> 입금/출금/이체 내역보기 </a></li>
 </ul>
 
 

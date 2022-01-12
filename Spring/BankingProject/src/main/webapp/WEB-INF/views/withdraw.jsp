@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>출금하기, Withdraw</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <style>
 	input{
@@ -26,18 +26,17 @@
 			<div>
 				<!-- <input type="radio" name ="info">  --> 
 				계좌 번호 : ${infos.account} 
+				<input type="hidden" name ="userAccount" value1="${infos.userAccount}" value2 ="${infos.balance}">
 				현재 잔고 : ${infos.balance}
-				이율 : ${infos.rate}
-				<input type="text" name ="depositAmount" placeholder="입금액을 쓰세요">
-				<input type="hidden" name ="userAccount" value="${infos.userAccount}">
-				<input type="button" value ="입금하기" > 
+				<input type="text" name ="withdrawalAmount" placeholder="출금액을 쓰세요">
+				<input type="button" value ="출금하기" > 
 			</div>
 		</c:forEach>
 	</form>
 	
 	<hr>
 	
-	<div id="DepositResult">
+	<div id="withdrawResult">
 	
 	
 	
@@ -48,44 +47,53 @@
 	
 	$('#depositForm').on('click', 'input[type=button]', function(){
 		
-		var userAccount =$('input[type=hidden]', $(this).parent()).val();
+		/* var userAccount =$('input[type=hidden]', $(this).parent()).val(); */
+		
+		var userAccount =$('input[type=hidden]', $(this).parent()).attr("value1");
 		console.log(userAccount);
 		
-		var depositAmount = $('input[type=text]', $(this).parent()).val();
-		console.log(depositAmount);
+		var withdrawalAmount = $('input[type=text]', $(this).parent()).val();
+		console.log(withdrawalAmount);
 		
-		/*  입금액 0원이나 입력하지 않았을 경우*/
-		if(!depositAmount){
-			alert('입금액을 입력해주세요');
+		var balance= $('input[type=hidden]', $(this).parent()).attr("value2");
+		console.log(balance);
+	
+		
+		/* 출금액과 잔고액 비교하기 */
+		if(!withdrawalAmount){
+			alert('출금액을 입력해주세요');
 			return false;
-		}else if(depositAmount == 0){
-			alert('입금액이 0원입니다.다시 입력해주세요');
+		}else if(withdrawalAmount > balance){
+			alert('[출금불가] 출금하려는 금액이 현재 잔액보다 큽니다.');
+			return false;
+		}else if(withdrawalAmount ==0){
+			alert('0원 입력했습니다. 출금액을 다시 입력해주세요');
 			return false;
 		}
 		
-	
+
 		 $.ajax({
-			   url:'<c:url value="/afterDeposit"/>',
+			   url:'<c:url value="/afterWithdraw"/>',
 			   type:'POST',
 			   data:{
 				   userAccount: userAccount,
-				   depositAmount:depositAmount,
+				   withdrawalAmount:withdrawalAmount,
 			   },
 			   success: function(data){
 				   
 					   console.log(data);
-					   alert('입금이 완료되었습니다.')
+					   alert('출금이 완료되었습니다.')
 						
 						var html ='<div>';
 		                html += '   <h2>' + data.userName+'</h2>';
-		                html += '   <h2> 입금 계좌 : ' + data.userAccount+'</h2>';
-		                html += '   <h2> 입금 후 잔액:' + data.balance+'</h2>';
+		                html += '   <h2> 출금 계좌 :' + data.userAccount+'</h2>';
+		                html += '   <h2> 출금 후 잔액: ' + data.balance+'</h2>';
 		                html += '</div>';
 		                html += '<hr>';
 		                
 		                
 		                //div에 추가하기
-		                $('#DepositResult').append(html);
+		                $('#withdrawResult').append(html);
 				   
 			   }/* success 끝 */
 			   

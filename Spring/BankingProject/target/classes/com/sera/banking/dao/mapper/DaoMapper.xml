@@ -48,6 +48,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		values(#{userAccount}, #{depositAmount});
 	</insert>
 	
+	
+	<!-- 7. 출금 후 잔고 update -->
+	<update id="updateAfterWithdrawal">
+		update user
+		set balance = balance - #{withdrawalAmount}
+		where userAccount = #{userAccount};
+	</update>
+	
+	<!-- 8. 출금 후 출금 내역 insert  -->
+	<insert id="insertWithdrawInfo">
+		insert into withdraw (userAccount, withdrawalAmount)
+		values(#{userAccount},#{withdrawalAmount});
+	</insert>
+	
 
 
 </mapper>

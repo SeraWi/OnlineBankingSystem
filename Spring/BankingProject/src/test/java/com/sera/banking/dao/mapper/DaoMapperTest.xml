@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mapper namespace ="com.sera.banking.dao.DaoTest">
+
+	<insert id="insertAccount">
+		insert into user(userName,userAccount,rate)
+		values(#{userName}, #{userAccount}, #{rate});
+	</insert>
+	
+</mapper>

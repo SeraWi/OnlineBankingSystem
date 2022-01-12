@@ -19,15 +19,15 @@ drop table banking.user;
 
 CREATE TABLE banking.transfer(
   `transferIdx` int NOT NULL AUTO_INCREMENT,
-  `myIdx` int NOT NULL,
-  `yourIdx` int NOT NULL,
+  `fromAccount` int(8) zerofill NOT NULL,
+  `toAccount` int(8) zerofill NOT NULL,
   `transferAmount` int NOT NULL,
   `transferDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`transferIdx`),
-  KEY `fk_myIdx_tr` (`myIdx`),
-  KEY `fk_yourIdx_tr` (`yourIdx`),
-  CONSTRAINT `fk_myIdx_tr` FOREIGN KEY (`myIdx`) REFERENCES `user` (`userIdx`) ON DELETE CASCADE,
-  CONSTRAINT `fk_yourIdx_tr` FOREIGN KEY (`yourIdx`) REFERENCES `user` (`userIdx`) ON DELETE CASCADE
+  KEY `fk_fromAccount_tr` (`fromAccount`),
+  KEY `fk_toAccount_tr` (`toAccount`),
+  CONSTRAINT `fk_fromAccount_tr` FOREIGN KEY (`fromAccount`) REFERENCES `user` (`userAccount`) ON DELETE CASCADE,
+  CONSTRAINT `fk_toAccount_tr` FOREIGN KEY (`toAccount`) REFERENCES `user` (`userAccount`) ON DELETE CASCADE
 ) ;
 drop table transfer;
 -- 이체 : 한계좌에서 다른 계좌로 돈 보내기
@@ -53,14 +53,11 @@ drop table deposit;
 -- 출금
 CREATE TABLE banking.withdraw(
   `withdrawalIdx` int NOT NULL AUTO_INCREMENT,
-  `userIdx` int NOT NULL,
-  `userAccount` int NOT NULL,
-  `withdrawalAmout` int NOT NULL,
+  `userAccount` int(8) zerofill NOT NULL,
+  `withdrawalAmount` int NOT NULL,
   `withdrawalDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`withdrawalIdx`),
-  KEY `fk_userIdx_wi` (`userIdx`),
   KEY `fk_userAccount_wi` (`userAccount`),
-  CONSTRAINT `fk_userIdx_wi` FOREIGN KEY (`userIdx`) REFERENCES `user` (`userIdx`) ON DELETE CASCADE,
   CONSTRAINT `fk_userAccount_wi` FOREIGN KEY (`userAccount`) REFERENCES `user` (`userAccount`) ON DELETE CASCADE
 ) ;
 drop table withdraw;

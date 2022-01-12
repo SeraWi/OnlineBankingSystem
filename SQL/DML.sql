@@ -86,8 +86,23 @@ where userAccount = 18831361 ;
 -- 출금액과 출금계좌 확인
 -- 출금계좌가 본인것이 맞는지, 출금계좌의 balance를 확인하기
 -- 출금하는 계좌 1개의 balance를 select해서 출금하는 금액과 비교하기
--- 비교한뒤 balanc보다 작으면 balance를 update하기
--- 계좌 출금 내역을 저장하기
+-- 비교한뒤 balance보다 작으면 balance를 update하기
+-- 계좌 출금 내역을 저장하기 
+
+select * from withdraw;
+insert into withdraw (userAccount, withdrawalAmount)
+values();
+
+update user
+set balance = balance - 20000
+where userAccount = 18831361;
+
+select *
+from user
+where userAccount = 18831361;
+
+
+
 
 -- 이체하기
 -- 내 계좌와 보내는 계좌의 balance를 update 하기 + 이체 내역에 저장하기

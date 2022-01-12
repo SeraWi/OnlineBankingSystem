@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sera.banking.dao.Dao;
+import com.sera.banking.domain.AccountInfo;
 
 @Service
 public class DepositService {
@@ -21,40 +22,27 @@ public class DepositService {
 
 	@Autowired
 	private SqlSessionTemplate template;
-	
 
-	
-	
 	//rollback이 안됨!
 	@Transactional(rollbackFor = Exception.class)
 	public void deposit(int userAccount, int depositAmount) {
 		// 계좌와 입금액을 파라미터로 받는다.
 		dao = template.getMapper(Dao.class);
-		
-		try {
+		try{
+			
+			dao.updateAfterDeposit(userAccount,depositAmount);
 			dao.insertDepositInfo(userAccount,depositAmount);
-			if(depositAmount == 2001) {
-				dao.updateAfterDeposit(userAccount,depositAmount);
-				
-			}else {
-				throw new Exception();
-			}
-			
-			
 		}catch(Exception e) {
-			
+			e.getStackTrace();
 		}
-		
-		// 입금내역에 insert
-
-
-
 	}
 
 
-	public int balanceAfterDeposit() {
 
-
-		return 0;
+	public AccountInfo balanceAfterDeposit(int userAccount) {
+		//입금 완료 후 내역 보여주기
+		dao = template.getMapper(Dao.class);
+		AccountInfo info = dao.selectAccountInfo(userAccount);
+		return info;
 	}
 }

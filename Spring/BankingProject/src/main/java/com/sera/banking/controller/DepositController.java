@@ -7,7 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sera.banking.domain.AccountInfo;
 import com.sera.banking.domain.UserVo;
@@ -15,6 +21,7 @@ import com.sera.banking.service.DepositService;
 import com.sera.banking.service.SearchAccountService;
 
 @Controller
+
 public class DepositController {
 	
 	
@@ -25,7 +32,6 @@ public class DepositController {
 	@Autowired
 	SearchAccountService searchService;
 
-	
 	@RequestMapping("/deposit")
 	public String deposit(
 			HttpServletRequest request,
@@ -40,15 +46,29 @@ public class DepositController {
 		// 전체 계좌 정보를 list로 반환
 		List<AccountInfo> allAccount = searchService.getAllAcountInfo(userName);
 		model.addAttribute("allAccount", allAccount);
-		
-		
-		depoService.deposit(18831361, 2000);
-		
 		return "/deposit";
 	}
 	
 	
-
 	
+	@PostMapping("/afterDeposit")
+	@ResponseBody
+	public AccountInfo afterDeposit(
+			HttpServletRequest request,
+			Model model,
+			int depositAmount,
+			int userAccount
+			) {
+		System.out.println(depositAmount);
+		System.out.println(userAccount);
+		
+		
+		//입금하기
+		depoService.deposit(userAccount, depositAmount);
+		
+		// 입금 후 정보 
+		AccountInfo info = depoService.balanceAfterDeposit(userAccount);
+		return info;
+	}
 	
 }

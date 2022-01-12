@@ -1,19 +1,18 @@
 package com.sera.banking.service;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sera.banking.dao.Dao;
+import com.sera.banking.dao.DaoTest;
 
 
 @Service
 class DepositServiceTest {
 	
-	private Dao dao;
+	private DaoTest dao;
 
 	@Autowired
 	private SqlSessionTemplate template;
@@ -26,7 +25,7 @@ class DepositServiceTest {
 		userAccount = 18831361;
 		depositAmount = 2000;
 		
-		dao = template.getMapper(Dao.class);
+		dao = template.getMapper(DaoTest.class);
 		
 		dao.updateAfterDeposit(18831361,2000);
 		dao.insertDepositInfo(18831361,2000);
