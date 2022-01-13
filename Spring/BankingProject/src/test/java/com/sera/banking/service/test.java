@@ -1,5 +1,6 @@
 package com.sera.banking.service;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 public class test {
@@ -7,7 +8,8 @@ public class test {
 	
 	@Test
 	public void add() {
-		System.out.println(1+2);
+		
+		Assert.assertEquals(3, 3);
 	}
 	
 }

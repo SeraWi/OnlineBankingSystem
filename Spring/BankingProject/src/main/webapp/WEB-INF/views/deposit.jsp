@@ -35,7 +35,7 @@
 				계좌 번호 : ${infos.account} 
 				현재 잔고 : ${infos.balance}
 				이율 : ${infos.rate}
-				<input type="text" name ="depositAmount" placeholder="입금액을 쓰세요">
+				<input type="text" name ="depositAmount" placeholder="입금액을 쓰세요" required>
 				<input type="hidden" name ="userAccount" value="${infos.userAccount}">
 				<input type="button" value ="입금하기" > 
 			</div>
@@ -70,12 +70,12 @@
 		depositAmount = parseInt(depositAmount);
 		
 		
-		/*  입금액 0원이나 입력하지 않았을 경우*/
+		/*  입금액 0원 이하이거나 입력하지 않았을 경우*/
 		if(!depositAmount){
 			alert('입금액을 입력해주세요');
 			return false;
-		}else if(depositAmount == 0){
-			alert('입금액이 0원입니다.다시 입력해주세요');
+		}else if(depositAmount <=0 ){
+			alert('입금액이 0원 이하입니다.다시 입력해주세요');
 			return false;
 		}
 		

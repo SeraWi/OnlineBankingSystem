@@ -6,29 +6,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sera.banking.dao.Dao;
-import com.sera.banking.dao.DaoTest;
 
 
 @Service
 class DepositServiceTest {
 	
-	private DaoTest dao;
-
+	Dao dao;
 	@Autowired
-	private SqlSessionTemplate template;
+	SqlSessionTemplate template;
 	
 	@Test
 	//@Transactional
-	public void deposit(int userAccount, int depositAmount) {
+	public void deposit() {
 		// 계좌와 입금액을 파라미터로 받는다.
 		
-		userAccount = 18831361;
-		depositAmount = 2000;
+		int userAccount = 18831361;
+		int depositAmount = 2000;
 		
-		dao = template.getMapper(DaoTest.class);
 		
-		dao.updateAfterDeposit(18831361,2000);
-		dao.insertDepositInfo(18831361,2000);
+		
+		System.out.println(userAccount);
+		dao = template.getMapper(Dao.class);
+		//dao.updateAfterDeposit(18831361,2000);
+		//Assert.assertEquals(result,1); 
+		//dao.insertDepositInfo(18831361,2000);
 	}
 
 	

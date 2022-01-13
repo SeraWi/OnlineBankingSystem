@@ -17,12 +17,22 @@ public class SearchAccountService {
 	@Autowired
 	private SqlSessionTemplate template;
 	
+	// 전체 계좌 정보 반환
 	public List<AccountInfo> getAllAcountInfo(String userName) {
-		List<AccountInfo> allAccountInfo = null;
-		dao= template.getMapper(Dao.class);
-		allAccountInfo = dao.selectAllAccount(userName);
 		
-		return allAccountInfo;
+		return template.getMapper(Dao.class).selectAllAccount(userName);
 	}
-
+	
+	//계좌 정보 하나 반환
+	public AccountInfo getOneAccount(int userAccount) {
+		
+		return template.getMapper(Dao.class).selectAccountInfo(userAccount);
+	}
+	
+	// 해당계좌와 이름에 맞는 정보 있는지 확인
+	public int checkAccount(String userName, int userAccount) {
+		
+		return template.getMapper(Dao.class).checkAccount(userAccount, userName);
+	}
+	
 }

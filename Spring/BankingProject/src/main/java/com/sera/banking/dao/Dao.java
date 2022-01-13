@@ -18,7 +18,7 @@ public interface Dao {
 	//2. 계좌 생성해서 insert
 	int insertAccount(@Param("userName")String userName, @Param("userAccount")int userAccount, @Param("rate")float rate);
 		
-	//3. 계좌 생성후 계좌 정보 반하ㅗㄴ
+	//3. 계좌 생성후 계좌 정보 반환
 	AccountInfo selectAccountInfo(@Param("userAccount")int userAccount);
 	
 	//4. userName에 해당하는 모든 계좌 정보 반환
@@ -45,6 +45,9 @@ public interface Dao {
 	// 11. 이체 내역 select
 	List<TransferHistory> selectTransferInfo(int userAccount);
 	
+	
+	// 12. userName과 userAccount 해당하는 정보있는지 확인 select
+	int checkAccount(@Param("userAccount")int userAccount, @Param("userName")String userName);
 	
 	
 	

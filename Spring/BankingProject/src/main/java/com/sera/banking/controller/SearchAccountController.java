@@ -4,11 +4,12 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sera.banking.domain.AccountInfo;
@@ -39,7 +40,7 @@ public class SearchAccountController {
 //		return "/searchAccount";
 //	}
 	
-	
+	// 계좌 조회에 사용
 	@GetMapping("/search/account")
 	public List<AccountInfo> account(
 			HttpServletRequest request,
@@ -56,6 +57,22 @@ public class SearchAccountController {
 		return allAccount;
 	}
 	
+	@ResponseBody
+	@GetMapping("/checkAccount")
+	public int checkAccount(
+			int userAccount, String userName
+			) {
+		return service.checkAccount(userName, userAccount);
+	}
 	
+	
+	 @ExceptionHandler(TypeMismatchException.class)
+	   public String handleTypeMismatchException(TypeMismatchException e) {
+	      
+	      //에러 내용 출력
+	      e.printStackTrace();
+	      
+	      return "error/pageNotFound";
+	  }
 	
 }

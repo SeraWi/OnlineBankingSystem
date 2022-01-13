@@ -44,7 +44,7 @@ public class HistoryController {
 		model.addAttribute("allAccount", allAccount);
 
 
-		return "history";
+		return "/history";
 	}
 	
 	// 거래 내역 조회

@@ -93,6 +93,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	where fromAccount = #{userAccount};
 	
 	</select>
+	
+	
+	<!-- 12. userName,userAccount 확인 select -->
+	<select id="checkAccount"
+				resultType="int"
+	>
+	select count(*)
+	from user
+	where userAccount = #{userAccount} and userName= #{userName};
+	</select>
+	
 
 
 </mapper>

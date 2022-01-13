@@ -37,7 +37,7 @@
 				계좌 번호 : ${infos.account} 
 				<input type="hidden" name ="userAccount" value1="${infos.userAccount}" value2 ="${infos.balance}">
 				현재 잔고 : ${infos.balance}
-				<input type="text" name ="withdrawalAmount" placeholder="출금액을 쓰세요">
+				<input type="text" name ="withdrawalAmount" placeholder="출금액을 쓰세요" required>
 				<input type="button" value ="출금하기" > 
 			</div>
 		</c:forEach>
@@ -73,6 +73,13 @@
 		balance = parseInt(balance);
 	
 		
+		/*  
+			[출금불가]
+		  1. 출금액 > 잔고
+		  2. 출금액 < 0 
+		*/
+		
+		
 		/* 출금액과 잔고액 비교하기 */
 		if(!withdrawalAmount){
 			alert('출금액을 입력해주세요');
@@ -80,8 +87,8 @@
 		}else if(withdrawalAmount > balance){
 			alert('[출금불가] 출금하려는 금액이 현재 잔액보다 큽니다.');
 			return false;
-		}else if(withdrawalAmount ==0){
-			alert('0원 입력했습니다. 출금액을 다시 입력해주세요');
+		}else if(withdrawalAmount <=0){
+			alert('0원이하를 입력했습니다. 출금액을 다시 입력해주세요');
 			return false;
 		}
 		
