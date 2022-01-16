@@ -18,49 +18,47 @@ import com.sera.banking.service.WithdrawService;
 
 @Controller
 public class WithdrawalController {
-
+	// 출금하기
 
 	@Autowired
 	SearchAccountService searchService;
 	
 	@Autowired
 	WithdrawService withService;
-
+	
+	
+	// 출금 할 전체 계좌 보여주기
 	@RequestMapping("/withdraw")
 	public String withdraw(	
 			HttpServletRequest request,
 			Model model) {
-		// 세션에 저장된 userName 
-		String userName = ((UserVo) request.getSession().getAttribute("userVo")).getUserName();
+		
+		int userIdx = ((UserVo) request.getSession().getAttribute("userVo")).getUserIdx();
 
-		// 해당 userName으로 계좌 정보 전부 가져오기
-		// 전체 계좌 정보를 list로 반환
-		List<AccountInfo> allAccount = searchService.getAllAcountInfo(userName);
+		List<AccountInfo> allAccount = searchService.getAllAcountInfo(userIdx);
 		model.addAttribute("allAccount", allAccount);
 
 		return "/withdraw";
 
 	}
 	
+	// 출금 후 잔액 반환(비동기)
 	@PostMapping("/afterWithdraw")
 	@ResponseBody
 	public AccountInfo afterDeposit(
 			HttpServletRequest request,
 			Model model,
 			int withdrawalAmount,
-			int userAccount
+			int accountIdx
 			) {
-		System.out.println(withdrawalAmount);
-		System.out.println(userAccount);
-		
 		
 		//출금하기
-		withService.withdraw(userAccount, withdrawalAmount);
+		withService.withdraw(accountIdx, withdrawalAmount);
 		
 		//출금 후 정보 
-		AccountInfo info = withService.balanceAfterWithdraw(userAccount);
+		AccountInfo info = withService.balanceAfterWithdraw(accountIdx);
 		
-		
+		System.out.println(info);
 		return info;
 	}
 

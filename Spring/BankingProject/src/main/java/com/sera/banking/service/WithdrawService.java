@@ -24,22 +24,25 @@ public class WithdrawService {
 	private SqlSessionTemplate template;
 
 
-	// 출금하기 update-> 출금 내역 insert하기
-	@Transactional
-	public void withdraw(int userAccount, int withdrawalAmount) {
+	@Transactional(rollbackFor = Exception.class)
+	public void withdraw(int accountIdx, int withdrawalAmount) {
 		dao = template.getMapper(Dao.class);
-
-		dao.updateAfterWithdrawal(userAccount, withdrawalAmount);
-		dao.insertWithdrawInfo(userAccount, withdrawalAmount);
+		
+		/*
+		 * 1. 출금하기, 잔액 update 
+		 * 2. 출금 후 잔액 반환  
+		 * 3. 출금 내역에 insert
+		 */
+		
+		dao.updateAfterWithdrawal(accountIdx, withdrawalAmount);
+		int currentBalance = dao.selectCurrentBalance(accountIdx);
+		dao.insertWithdrawInfo(accountIdx, withdrawalAmount,currentBalance);
 	}
 
-
-	public AccountInfo balanceAfterWithdraw(int userAccount) {
-
-		//출금 완료 후 내역 보여주기
-		dao = template.getMapper(Dao.class);
-		AccountInfo info = dao.selectAccountInfo(userAccount);
-		return info;
+	// 출금 완료 후 정보 반환
+	public AccountInfo balanceAfterWithdraw(int accountIdx) {
+		
+		return template.getMapper(Dao.class).selectAccountInfo(accountIdx);
 	}
 
 }

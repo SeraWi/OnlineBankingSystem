@@ -6,103 +6,149 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace ="com.sera.banking.dao.Dao">
 	
-	<!--  1. 계좌 사용가능한지 확인  select-->
+	<!--  1. 계좌 사용가능한지 확인 , select -->
 	<select id="selectAccount" resultType="int">
 		select count(*)
-		from user 
+		from account 
 		where userAccount = #{userAccount}; 
 	</select>
 	
 	<!-- 2. 계좌 생성, insert -->
 	<insert id="insertAccount">
-		insert into user(userName,userAccount,rate)
-		values(#{userName}, #{userAccount}, #{rate});
+		insert into account (userIdx,userName,userAccount,rate)
+		values(#{userIdx},#{userName}, #{userAccount}, #{rate});
 	</insert>
 	
-	<!-- 3. 계좌 조회 select -->
+	<!-- 3. 계좌 조회,  select -->
 	<select id="selectAccountInfo" 
 			resultType= "com.sera.banking.domain.AccountInfo">
 		select * 
-		from user
+		from account
+		where accountIdx = #{accountIdx};
+	</select>
+	
+	<!-- 4. 계좌 생성후, 생성 계좌 정보 하나 반환 select-->
+	<select id="selectAccountInfo2" 
+			resultType= "com.sera.banking.domain.AccountInfo">
+		select * 
+		from account
 		where userAccount = #{userAccount};
 	</select>
 	
-	<!-- 4. userName에 해당하는 전체 계좌 정보 -->
+	
+	<!-- 5. 사용자의 전체 계좌 정보 -->
 	<select id="selectAllAccount" 
 			resultType= "com.sera.banking.domain.AccountInfo">
 		select * 
-		from user
-		where userName = #{userName};
+		from account
+		where userIdx = #{userIdx};
 	</select>
 	
-	<!-- 5. 입금 후 잔액 update -->
+	<!-- 6. 입금 후 잔액 update -->
 	<update id="updateAfterDeposit">
-		update user
+		update account
 		set balance = balance * (1+rate/100) + #{depositAmount}
-		where userAccount = #{userAccount} ;
+		where accountIdx = #{accountIdx} ;
 	</update>
 	
-	<!-- 6. 입금 후 입금내역 insert -->
+	<!-- 7.  최근 잔액 반환 -->
+	<select id="selectCurrentBalance" resultType="int">
+		select balance
+		from account
+		where accountIdx = #{accountIdx};
+	</select>
+	
+	<!-- 8. 입금 후 입금내역 insert -->
 	<insert id="insertDepositInfo">
-		insert into deposit(userAccount, depositAmount)
-		values(#{userAccount}, #{depositAmount});
+		insert into deposit(accountIdx, depositAmount,currentBalance)
+		values(#{accountIdx},#{depositAmount},#{currentBalance});
 	</insert>
 	
 	
-	<!-- 7. 출금 후 잔고 update -->
+	<!-- 9. 출금 후 잔고 update -->
 	<update id="updateAfterWithdrawal">
-		update user
+		update account
 		set balance = balance - #{withdrawalAmount}
-		where userAccount = #{userAccount};
+		where accountIdx = #{accountIdx};
 	</update>
 	
-	<!-- 8. 출금 후 출금 내역 insert  -->
+	<!-- 10. 출금 후 출금 내역 insert  -->
 	<insert id="insertWithdrawInfo">
-		insert into withdraw (userAccount, withdrawalAmount)
-		values(#{userAccount},#{withdrawalAmount});
+		insert into withdraw(accountIdx, withdrawalAmount,currentBalance)
+		values(#{accountIdx},#{withdrawalAmount},#{currentBalance});
 	</insert>
 	
-	<!-- 9. 입금 내역 select  -->
+	<!-- 11. 입금 내역 select  -->
 	<select id="selectDepositInfo"
-			resultType= "com.sera.banking.domain.DepositHistory"
+			resultType= "com.sera.banking.domain.DepositInfo"
 	>
-	select *
-	from deposit
-	where userAccount = #{userAccount};
+		select a.userAccount,d.depositAmount,d.currentBalance, d.depositDate
+		from deposit d natural join account a
+		where accountIdx = #{accountIdx};
 	</select>
 	
-	
-	
-	<!-- 10. 출금 내역 select  -->
+	<!-- 12. 출금 내역 select  -->
 	<select id="selectWithdrawInfo"
-	resultType= "com.sera.banking.domain.WithdrawHistory"
+	resultType= "com.sera.banking.domain.WithdrawInfo"
 	>
-	select *
-	from withdraw
-	where userAccount = #{userAccount};
+		select a.userAccount,w.withdrawalAmount,w.currentBalance,w.withdrawalDate
+		from withdraw w natural join account a
+		where accountIdx = #{accountIdx};
 	</select>
 	
 	
-	<!-- 11. 이체 내역 select  -->
-	<select id="selectTransferInfo"
-		resultType= "com.sera.banking.domain.TransferHistory"
+	<!-- 13. 이체 내역 출금 select  -->
+	<select id="selectTransferOut"
+		resultType= "com.sera.banking.domain.TransferInfo"
 	>
-	select u.userAccount, u.userName, t.transferAmount, t.transferDate
-	from transfer t inner join user u
-	on t.toAccount = u.userAccount
-	where fromAccount = #{userAccount};
-	
+		select a.userAccount,a.userName, t.transferAmount, t.transferDate
+		from transfer t inner join account a
+		on t.toIdx = a.accountIdx
+		where fromIdx = #{accountIdx};
+	</select>
+		
+	<!-- 14. 이체 내역 입금 select  -->
+	<select id="selectTransferIn"
+		resultType= "com.sera.banking.domain.TransferInfo"
+	>
+		select a.userAccount,a.userName, t.transferAmount,t.transferDate
+		from transfer t inner join account a
+		on t.fromIdx = a.accountIdx
+		where toIdx = #{accountIdx};
 	</select>
 	
 	
-	<!-- 12. userName,userAccount 확인 select -->
+	<!-- 15. userName,userAccount 확인 select -->
 	<select id="checkAccount"
 				resultType="int"
 	>
 	select count(*)
-	from user
+	from account
 	where userAccount = #{userAccount} and userName= #{userName};
 	</select>
+	
+	<!-- 16. 계좌 번호로 accountIdx select -->
+	<select id="getaccountIdx" resultType="int">
+	select accountIdx
+	from account
+	where userAccount = #{userAccount};
+	</select>
+	
+	<!-- 17. 이체(입금) 후 update -->
+	<update id="updateAfterTransfer">
+	update account
+	set balance = balance + #{transferAmount}
+	where accountIdx = #{accountIdx};
+	</update>
+	
+	<!-- 18. 이체 내역 insert -->
+	<insert id="insertTransfer"
+			parameterType="com.sera.banking.domain.TransferDto"
+	>
+	insert into transfer (fromIdx,toIdx, transferAmount)
+	values(#{fromIdx},#{toIdx},#{transferAmount});
+	</insert>
+
 	
 
 

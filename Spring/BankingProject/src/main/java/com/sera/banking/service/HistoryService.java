@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sera.banking.dao.Dao;
-import com.sera.banking.domain.DepositHistory;
-import com.sera.banking.domain.TransferHistory;
-import com.sera.banking.domain.WithdrawHistory;
+import com.sera.banking.domain.DepositInfo;
+import com.sera.banking.domain.TransferInfo;
+import com.sera.banking.domain.WithdrawInfo;
 
 @Service
 public class HistoryService {
@@ -21,22 +21,28 @@ public class HistoryService {
 	SqlSessionTemplate template;
 	
 	// 입금 내역
-	public List<DepositHistory> depositInfos(int userAccount){
+	public List<DepositInfo> depositInfos(int accountIdx){
 		
-		return template.getMapper(Dao.class).selectDepositInfo(userAccount);
+		return template.getMapper(Dao.class).selectDepositInfo(accountIdx);
 	}
 	
 	// 출금 내역
-	public List<WithdrawHistory> withdrawInfos(int userAccount){
+	public List<WithdrawInfo> withdrawInfos(int accountIdx){
 		
-		return template.getMapper(Dao.class).selectWithdrawInfo(userAccount);
+		return template.getMapper(Dao.class).selectWithdrawInfo(accountIdx);
 	}
 	
 	
-	// 이체 내역 
-	public List<TransferHistory> transferInfos(int userAccount){
+	// 이체 출금
+	public List<TransferInfo> transferOut(int accountIdx){
 		
-		return template.getMapper(Dao.class).selectTransferInfo(userAccount);
+		return template.getMapper(Dao.class).selectTransferOut(accountIdx);
+	}
+	
+	// 이체 입금
+	public List<TransferInfo> transferIn(int accountIdx){
+		
+		return template.getMapper(Dao.class).selectTransferIn(accountIdx);
 	}
 	
 }

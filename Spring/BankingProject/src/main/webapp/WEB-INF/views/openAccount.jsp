@@ -8,22 +8,48 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-	li{
-		font-size :25px;
+	*{
+		font-size : 15px;
+		margin-bottom:15px;
 	}
+	body{
+		margin-top:50px;
+		margin-left: 70px;
+		margin-right:70px;
+	}
+	table{
+		width:800px;
+		border-top: 1px solid #444444;
+		border-collapse: collapse;
+	}
+   th, td {
+   		border-bottom: 0.5px solid #444444;
+    	padding : 10px;
+    	text-align : center;
+   }
 </style>
 </head>
 <body>
-	<h1> ${sessionScope.userVo.userName}</h1>
+	<h1> ${sessionScope.userVo.userName}님, 계좌를 생성했습니다.</h1>
 	
-	<ul>
-		<li> 이름 : ${accountInfo.userName} </li>
-		<li> 계좌 번호 :${accountInfo.userAccount}</li>
-		<li> 이율: ${accountInfo.rate}%</li>
-		<li> 현재 잔액 : ${accountInfo.balance}</li>
-		<li> 계좌 생성일 : ${accountInfo.createDate}</li>
-		<li> 계좌 : ${accountInfo.account}</li> <!-- 포맷맞춰서 반환 -->
+	<table>
+		<thead>
+	        <tr>
+	          <th>계좌번호</th>
+	          <th>현재잔고</th>
+	          <th>이율</th>
+	          <th>계좌생성일</th>
+	        </tr>
+      	</thead>
+		<tbody>
+			<tr>
+				<td> ${accountInfo.account}</td>
+				<td> ${accountInfo.balance}</td>
+				<td> ${accountInfo.rate}%</td>
+				<td> ${accountInfo.createDate}</td>
+			</tr>
+		</tbody>
 		
-	</ul>
+	</table>
 </body>
 </html>

@@ -16,11 +16,11 @@ public class CreateAccountService {
 	@Autowired
 	private SqlSessionTemplate template;
 
-	// 계좌번호(8자리)
+	// 계좌번호
 	private int userAccount;
 
-	// 2. 계좌를 생성한뒤 -> 반환한다.
-	public AccountInfo createAccount(String userName) {
+	// 계좌 생성후 반환
+	public AccountInfo createAccount(String userName, int userIdx) {
 
 		// 1. 계좌번호 랜덤 8자리 생성
 		randomAccount();
@@ -31,23 +31,21 @@ public class CreateAccountService {
 		rate = (float)Math.round(rate *10)/10; // 소수 첫째자리까지 표현
 		System.out.println(rate);
 		
-		// 3. 계좌 생성 (insert) -> 실패했을 때 처리?
+		// 3. 계좌 생성 (insert) 
 		dao = template.getMapper(Dao.class);
-		int result = dao.insertAccount(userName,userAccount,rate);
-		System.out.println(result);
+		int result = dao.insertAccount(userIdx,userName,userAccount,rate);
 		
 		// 4. insert가 성공하면 다시 accountInfo객체를 받아서  반환한다.
 		AccountInfo info = null;
 		if(result == 1) {
-			info = dao.selectAccountInfo(userAccount);
+			info = dao.selectAccountInfo2(userAccount);
 		}
 		
-		System.out.println("service : " + info.toString());
 		return info;
 	}
 
 
-	
+	// 랜덤 계좌 생성
 	public int randomAccount() {
 
 		int accountChk = 1;
@@ -63,9 +61,6 @@ public class CreateAccountService {
 			//계좌번호 겹치면 1반환, 겹치지 않으면 0반환
 			accountChk = dao.selectAccount(userAccount);
 		}
-		
-//		System.out.println("accountChk : " + accountChk);
-//		System.out.println(userAccount);
 		
 		return userAccount;
 	}

@@ -8,20 +8,57 @@
 <title>출금하기, Withdraw</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <style>
-	input{
-	
-		font-size: 25px;
+	*{
+		font-size : 15px;
 	}
-	
-	*{	
-		
-		font-size : 25px;
-	}
-	
 	body{
 		margin-top:50px;
 		margin-left: 70px;
 	}
+	
+	.depositForm{
+		width:1000px;
+	
+	}
+	.title{
+		/*전체 사이즈  */
+		width:900px;
+	    height:43px;
+	    line-height:43px;
+	
+	    font-size:14px;
+		/* 실선 */
+	    border-bottom: 0.1px solid #DBDBDB;
+		
+		/* 가로 정렬*/
+	    display:flex;
+	    flex-direction:row;
+    }
+    .title>div{
+    	/* 가로 사이즈 */
+    	width: 333px;
+    	text-align: center;
+    }
+    .infos{
+    	display:flex;
+	    flex-direction:column;
+	    border-bottom: 0.1px solid #DBDBDB;
+    
+    }
+    .list{
+    	height:35px;
+    	line-height:35px;
+    	display:flex;
+	    flex-direction:row;
+	    border-bottom: 0.1px solid #DBDBDB;
+    }
+    .list div{
+    	width:333px;
+    }
+	form{
+		width:900px;
+	}
+	
 </style>
 </head>
 <body>
@@ -31,19 +68,28 @@
 	<!-- userName에 해당하는 모든 계좌 보여주기 -->
 	
 	<form method="post" id="depositForm">
-		<c:forEach var="infos" items="${allAccount}" >
-			<div>
-				<!-- <input type="radio" name ="info">  --> 
-				계좌 번호 : ${infos.account} 
-				<input type="hidden" name ="userAccount" value1="${infos.userAccount}" value2 ="${infos.balance}">
-				현재 잔고 : ${infos.balance}
-				<input type="text" name ="withdrawalAmount" placeholder="출금액을 쓰세요" required>
-				<input type="button" value ="출금하기" > 
-			</div>
-		</c:forEach>
-	</form>
+		<div class="title">
+				<div>계좌번호</div>
+				<div>현재잔고</div>
+				<!-- <div>이율</div> -->
+				<div>선택</div>
+		</div>
+		
+		<div class="infos">
+			<c:forEach var="infos" items="${allAccount}" >
+				<div class="list"> 
+					<!-- <input type="radio" name ="info">  --> 
+					<div>${infos.account} </div>
+					<input type="hidden" name ="userAccount" value1="${infos.accountIdx}" value2 ="${infos.balance}">
+					<div class="balance">${infos.balance}</div>
+					<input type="text" name ="withdrawalAmount" placeholder="출금액을 쓰세요" required>
+					<input type="button" value ="출금하기" > 
+				</div>
+			</c:forEach>
+		</div> <!-- 계좌 목록 끝 -->
+	</form> <!-- form 끝 -->
 	
-	<hr>
+	
 	
 	<div id="withdrawResult">
 	
@@ -57,18 +103,14 @@
 	
 	$('#depositForm').on('click', 'input[type=button]', function(){
 		
-		/* 출금하는 계좌, 출금액, 현재 잔고 정보 */
-		var userAccount =$('input[type=hidden]', $(this).parent()).attr("value1");
-		console.log(userAccount);
+		/* 출금하는 계좌Idx, 출금액, 현재 잔고 정보 */
+		var accountIdx =$('input[type=hidden]', $(this).parent()).attr("value1");
 		
 		var withdrawalAmount = $('input[type=text]', $(this).parent()).val();
-		console.log(withdrawalAmount);
 		
 		var balance= $('input[type=hidden]', $(this).parent()).attr("value2");
-		console.log(balance);
 		
-		/* 문자열 비교 막기 위해 문자를 숫자로 변환*/
-		userAccount = parseInt(userAccount);
+		accountIdx = parseInt(accountIdx);
 		withdrawalAmount = parseInt(withdrawalAmount);
 		balance = parseInt(balance);
 	
@@ -97,24 +139,25 @@
 			   url:'<c:url value="/afterWithdraw"/>',
 			   type:'POST',
 			   data:{
-				   userAccount: userAccount,
+				   accountIdx: accountIdx,
 				   withdrawalAmount:withdrawalAmount,
 			   },
 			   success: function(data){
 				   
-					   console.log(data);
 					   alert('출금이 완료되었습니다.')
 						
 						var html ='<div>';
-		                html += '   <h2>' + data.userName+'</h2>';
-		                html += '   <h2> 출금 계좌 :' + data.userAccount+'</h2>';
-		                html += '   <h2> 출금 후 잔액: ' + data.balance+'</h2>';
+		               /*  html += '   <h2>' + data.userName+'</h2>'; */
+		                html += '   <h2> [출금완료]'+data.account+' 계좌로 ' + withdrawalAmount+'원 출금하였습니다</h2>';
+		                html += '   <h2> 출금 후 잔액은 ' + data.balance+'원 입니다.</h2>';
 		                html += '</div>';
 		                html += '<hr>';
 		                
 		                
 		                //div에 추가하기
 		                $('#withdrawResult').append(html);
+		                
+		                /* 잔고 낮춰주기 */
 				   
 			   }/* success 끝 */
 			   
@@ -122,7 +165,9 @@
 		   
 		   $('input[type=text]', $(this).parent()).val("");
 		   
-		
+		   /* 잔액 업데이트 */
+		   var balance= $('input[type=hidden]', $(this).parent()).attr("value2", balance-withdrawalAmount);
+	
 	});/* click 끝 */
 	</script>
 	

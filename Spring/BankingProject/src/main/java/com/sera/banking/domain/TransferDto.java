@@ -1,21 +1,35 @@
 package com.sera.banking.domain;
 
 public class TransferDto {
+	// 이체 할때
 	
+	private int toIdx;//받는 사람 Idx
+	private int toAccount; //받는 사람 계좌
+	private int fromIdx; // 보내는 사람 Idx
+	private int transferAmount; //이체액
+	private String userName; // 받는 사람 이름
 	
-	private int toAccount;
-	private int fromAccount;
-	private int transferAmount;
-	private String userName;
+	private String toAccount2; 
 	
-	public TransferDto() {}
-	
-	public TransferDto(int toAccount, int fromAccount, int transferAmount, String userName) {
+
+	public TransferDto(){}
+
+	public TransferDto(int toIdx, int toAccount, int fromIdx, int transferAmount, String userName) {
 		super();
+		this.toIdx = toIdx;
 		this.toAccount = toAccount;
-		this.fromAccount = fromAccount;
+		this.fromIdx = fromIdx;
 		this.transferAmount = transferAmount;
 		this.userName = userName;
+	}
+
+
+	public int getToIdx() {
+		return toIdx;
+	}
+
+	public void setToIdx(int toIdx) {
+		this.toIdx = toIdx;
 	}
 
 	public int getToAccount() {
@@ -26,12 +40,12 @@ public class TransferDto {
 		this.toAccount = toAccount;
 	}
 
-	public int getFromAccount() {
-		return fromAccount;
+	public int getFromIdx() {
+		return fromIdx;
 	}
 
-	public void setFromAccount(int fromAccount) {
-		this.fromAccount = fromAccount;
+	public void setFromIdx(int fromIdx) {
+		this.fromIdx = fromIdx;
 	}
 
 	public int getTransferAmount() {
@@ -49,12 +63,20 @@ public class TransferDto {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+	
+	public String getToAccount2() {
+		return String.format("%08d",toAccount);
+	}
 
+	public void setToAccount2(String toAccount2) {
+		this.toAccount2 = toAccount2;
+	}
+	
 	@Override
 	public String toString() {
-		return "TransferDto [toAccount=" + toAccount + ", fromAccount=" + fromAccount + ", transferAmount="
+		return "TransferDto [toIdx=" + toIdx + ", toAccount=" + toAccount + ", fromIdx=" + fromIdx + ", transferAmount="
 				+ transferAmount + ", userName=" + userName + "]";
-	}
+	};
 	
 	
 }

@@ -1,3 +1,5 @@
+
+-- 기존 user(account)
 CREATE TABLE banking.user(
   `userIdx` int NOT NULL AUTO_INCREMENT,
   `userName` varchar(50) COLLATE utf8_bin NOT NULL,
@@ -29,6 +31,19 @@ CREATE TABLE banking.transfer(
   CONSTRAINT `fk_fromAccount_tr` FOREIGN KEY (`fromAccount`) REFERENCES `user` (`userAccount`) ON DELETE CASCADE,
   CONSTRAINT `fk_toAccount_tr` FOREIGN KEY (`toAccount`) REFERENCES `user` (`userAccount`) ON DELETE CASCADE
 ) ;
+
+CREATE TABLE banking.transfer(
+  `transferIdx` int NOT NULL AUTO_INCREMENT,
+  `fromIdx` int NOT NULL,
+  `toIdx` int not NULL,
+  `transferAmount` int NOT NULL,
+  `transferDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`transferIdx`),
+  KEY `fk_fromIdx_tr` (`fromIdx`),
+  KEY `fk_toIdx_tr` (`toIdx`),
+  CONSTRAINT `fk_fromIdx_tr` FOREIGN KEY (`fromIdx`) REFERENCES `user` (`userIdx`) ON DELETE CASCADE,
+  CONSTRAINT `fk_toIdx_tr` FOREIGN KEY (`toIdx`) REFERENCES `user` (`userIdx`) ON DELETE CASCADE
+) ;
 drop table transfer;
 -- 이체 : 한계좌에서 다른 계좌로 돈 보내기
 -- 계좌만 다르면 된다. 내가 내계좌로 보내는것  + 내가 남 계좌로 보내기
@@ -45,6 +60,15 @@ CREATE TABLE banking.deposit(
   KEY `fk_userAccount_di` (`userAccount`),
   CONSTRAINT `fk_userAccount_di` FOREIGN KEY (`userAccount`) REFERENCES `user` (`userAccount`) ON DELETE CASCADE
 ) ;
+CREATE TABLE banking.deposit(
+  `depositIdx` int NOT NULL AUTO_INCREMENT,
+  `userIdx` int NOT NULL,
+  `depositAmount` int NOT NULL,
+  `depositDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`depositIdx`),
+  KEY `fk_userIdx_di` (`userIdx`),
+  CONSTRAINT `fk_userIdx_di` FOREIGN KEY (`userIdx`) REFERENCES `user` (`userIdx`) ON DELETE CASCADE
+) ;
 drop table deposit;
 -- 입금은 오로지 내계좌만 된다.
 -- 1. 입금한다. 2. 내계좌인지 확인한다.(?) -- 사용자 이름으로 확인
@@ -59,6 +83,15 @@ CREATE TABLE banking.withdraw(
   PRIMARY KEY (`withdrawalIdx`),
   KEY `fk_userAccount_wi` (`userAccount`),
   CONSTRAINT `fk_userAccount_wi` FOREIGN KEY (`userAccount`) REFERENCES `user` (`userAccount`) ON DELETE CASCADE
+) ;
+CREATE TABLE banking.withdraw(
+  `withdrawalIdx` int NOT NULL AUTO_INCREMENT,
+  `userIdx` int NOT NULL,
+  `withdrawalAmount` int NOT NULL,
+  `withdrawalDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`withdrawalIdx`),
+  KEY `fk_userIdx_wi` (`userIdx`),
+  CONSTRAINT `fk_userIdx_wi` FOREIGN KEY (`userIdx`) REFERENCES `user` (`userIdx`) ON DELETE CASCADE
 ) ;
 drop table withdraw;
 -- 출금 : 내계좌만 가능

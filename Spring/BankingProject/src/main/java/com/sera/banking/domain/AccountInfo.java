@@ -6,8 +6,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 public class AccountInfo {
+	// 계좌 정보
 	
-	private int userIdx;
+	private int accountIdx; //계좌 Idx
 	private String userName;
 	private int userAccount;
 	private int balance;
@@ -20,9 +21,9 @@ public class AccountInfo {
 	
 	public AccountInfo() {}
 
-	public AccountInfo(int userIdx, String userName, int userAccount, int balance, float rate, Timestamp createDate) {
+	public AccountInfo(int accountIdx, String userName, int userAccount, int balance, float rate, Timestamp createDate) {
 		super();
-		this.userIdx = userIdx;
+		this.accountIdx = accountIdx;
 		this.userName = userName;
 		this.userAccount = userAccount;
 		this.balance = balance;
@@ -31,12 +32,13 @@ public class AccountInfo {
 		
 	}
 
-	public int getUserIdx() {
-		return userIdx;
+
+	public int getAccountIdx() {
+		return accountIdx;
 	}
 
-	public void setUserIdx(int userIdx) {
-		this.userIdx = userIdx;
+	public void setAccountIdx(int accountIdx) {
+		this.accountIdx = accountIdx;
 	}
 
 	public String getUserName() {
@@ -90,12 +92,11 @@ public class AccountInfo {
 
 	@Override
 	public String toString() {
-		return "AccountInfo [userIdx=" + userIdx + ", userName=" + userName + ", userAccount=" + userAccount
+		return "AccountInfo [accountIdx=" + accountIdx + ", userName=" + userName + ", userAccount=" + userAccount
 				+ ", balance=" + balance + ", rate=" + rate + ", createDate=" + createDate + ", account=" + account
 				+ "]";
 	}
-	
-	
+
 	
 	
 	

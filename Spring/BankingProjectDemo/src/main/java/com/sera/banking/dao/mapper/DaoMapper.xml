@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace ="com.sera.banking.dao.Dao">
+	
+	<!--  1. 계좌 사용가능한지 확인  select-->
+	<select id="selectAccount" resultType="int">
+		select count(*)
+		from user 
+		where userAccount = #{userAccount}; 
+	</select>
+	
+	<!-- 2. 계좌 생성, insert -->
+	<insert id="insertAccount">
+		insert into user(userName,userAccount,rate)
+		values(#{userName}, #{userAccount}, #{rate});
+	</insert>
+	
+	<!-- 3. 계좌 조회 select -->
+	<select id="selectAccountInfo" 
+			resultType= "com.sera.banking.domain.AccountInfo">
+		select * 
+		from user
+		where userIdx = #{userIdx};
+	</select>
+	
+	<!-- 3.1 계좌 조회(계좌번호로 조회) select -->
+	<select id="selectAccountInfo2" 
+			resultType= "com.sera.banking.domain.AccountInfo">
+		select * 
+		from user
+		where userAccount = #{userAccount};
+	</select>
+	
+	
+	<!-- 4. userName에 해당하는 전체 계좌 정보 -->
+	<select id="selectAllAccount" 
+			resultType= "com.sera.banking.domain.AccountInfo">
+		select * 
+		from user
+		where userName = #{userName};
+	</select>
+	
+	<!-- 5. 입금 후 잔액 update -->
+	<update id="updateAfterDeposit">
+		update user
+		set balance = balance * (1+rate/100) + #{depositAmount}
+		where userIdx = #{userIdx} ;
+	</update>
+	
+	<!-- 6. 입금 후 입금내역 insert -->
+	<insert id="insertDepositInfo">
+		insert into deposit(userIdx, depositAmount)
+		values(#{userIdx}, #{depositAmount});
+	</insert>
+	
+	
+	<!-- 7. 출금 후 잔고 update -->
+	<update id="updateAfterWithdrawal">
+		update user
+		set balance = balance - #{withdrawalAmount}
+		where userIdx = #{userIdx};
+	</update>
+	
+	<!-- 8. 출금 후 출금 내역 insert  -->
+	<insert id="insertWithdrawInfo">
+		insert into withdraw (userIdx, withdrawalAmount)
+		values(#{userIdx},#{withdrawalAmount});
+	</insert>
+	
+	<!-- 9. 입금 내역 select  -->
+	<select id="selectDepositInfo"
+			resultType= "com.sera.banking.domain.DepositInfo"
+	>
+	select *
+	from deposit natural join user
+	where userIdx = #{userIdx};
+	</select>
+	
+	
+	
+	<!-- 10. 출금 내역 select  -->
+	<select id="selectWithdrawInfo"
+	resultType= "com.sera.banking.domain.WithdrawInfo"
+	>
+	select *
+	from withdraw natural join user
+	where userIdx = #{userIdx};
+	</select>
+	
+	
+	<!-- 11. 이체 내역 select  -->
+	<select id="selectTransferInfo"
+		resultType= "com.sera.banking.domain.TransferInfo"
+	>
+	select u.userIdx, u.userAccount, u.userName, t.transferAmount,t.transferDate
+	from transfer t inner join user u
+	on t.toIdx = u.userIdx
+	where fromIdx = #{userIdx};
+	
+	</select>
+	
+	
+		
+	<!-- 11.1 이체 내역 select  -->
+	<select id="selectTransferInfo2"
+		resultType= "com.sera.banking.domain.TransferInfo"
+	>
+	select u.userIdx, u.userAccount, u.userName, t.transferAmount,t.transferDate
+	from transfer t inner join user u
+	on t.fromIdx = u.userIdx
+	where toIdx = #{userIdx};
+	
+	</select>
+	
+	
+	<!-- 12. userName,userAccount 확인 select -->
+	<select id="checkAccount"
+				resultType="int"
+	>
+	select count(*)
+	from user
+	where userAccount = #{userAccount} and userName= #{userName};
+	</select>
+	
+	<!-- 13. Idx select -->
+	<select id="getIdx" resultType="int">
+	select userIdx
+	from user
+	where userAccount = #{userAccount};
+	</select>
+	
+	<!-- 14. 이체(입금) 후 update -->
+	<update id="updateAfterTransfer">
+	update user
+	set balance = balance + #{transferAmount}
+	where userIdx = #{userIdx};
+	</update>
+	
+	<!-- 15. 이체 내역 insert -->
+	<insert id="insertTransfer"
+			parameterType="com.sera.banking.domain.TransferDto"
+	>
+	insert into transfer (fromIdx,toIdx, transferAmount)
+	values(#{fromIdx},#{toIdx},#{transferAmount});
+	</insert>
+
+	
+
+
+</mapper>

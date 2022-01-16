@@ -5,17 +5,26 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>결제 내역</title>
+<title>이체/입금/출금 내역 보기</title>
 <style>
 	
 	*{
-		font-size : 25px;
+		font-size : 15px;
 		margin-bottom:15px;
 	}
 	body{
 		margin-top:50px;
 		margin-left: 70px;
 	}
+	table{
+		width:900px;
+		border-top: 1px solid #444444;
+		border-collapse: collapse;
+	}
+   th, td {
+   		border-bottom: 0.5px solid #444444;
+    	padding : 10px;
+   }
 </style>
 </head>
 <body>
@@ -24,14 +33,26 @@
 	
 	<h2> 계좌번호를 누르면 입금,출금,이체 내역을 확인할 수 있습니다.</h2>
 	
-	<c:forEach var="infos" items="${allAccount}" >
-			<div>
-				<!-- <input type="radio" name ="info">  --> 
-				계좌 번호: <a href="<c:url value='/history/details/${infos.userAccount}'/>">${infos.account}</a>
-				현재 잔고 : ${infos.balance}
-				이율 : ${infos.rate}
-			</div>
-	</c:forEach>
+	
+	<table>
+		<thead>
+	        <tr>
+	          <th>계좌번호</th>
+	          <th>현재잔고</th>
+	          <th>이율</th>
+	        </tr>
+      	</thead>
+      	<tbody>
+			<c:forEach var="infos" items="${allAccount}" >
+					<tr>
+						<!-- <input type="radio" name ="info">  --> 
+						<th><a href="<c:url value='/history/${infos.accountIdx}'/>">${infos.account}</a></th>
+						<th>${infos.balance}</th>
+						<th>${infos.rate}</th>
+					</tr>
+			</c:forEach>
+		</tbody>
+	</table>
 	
 	
 	

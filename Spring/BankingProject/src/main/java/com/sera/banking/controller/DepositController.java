@@ -24,7 +24,7 @@ import com.sera.banking.service.SearchAccountService;
 
 public class DepositController {
 	
-	
+	//입금하기
 	
 	@Autowired
 	DepositService depoService;
@@ -38,36 +38,32 @@ public class DepositController {
 			Model model
 			) {
 		
-		// 세션에 저장된 userName 
-		String userName = ((UserVo) request.getSession().getAttribute("userVo")).getUserName();
+		// 세션에 저장된 userIdx 
+		int userIdx = ((UserVo) request.getSession().getAttribute("userVo")).getUserIdx();
 		
-		
-		// 해당 userName으로 계좌 정보 전부 가져오기
-		// 전체 계좌 정보를 list로 반환
-		List<AccountInfo> allAccount = searchService.getAllAcountInfo(userName);
+		// 해당 userIdx으로 전체 계좌 정보 반환
+		List<AccountInfo> allAccount = searchService.getAllAcountInfo(userIdx);
 		model.addAttribute("allAccount", allAccount);
+		
 		return "/deposit";
 	}
 	
 	
-	
+	// 입금 후 정보 반환 
 	@PostMapping("/afterDeposit")
 	@ResponseBody
 	public AccountInfo afterDeposit(
 			HttpServletRequest request,
 			Model model,
 			int depositAmount,
-			int userAccount
+			int accountIdx
 			) {
-		System.out.println(depositAmount);
-		System.out.println(userAccount);
-		
 		
 		//입금하기
-		depoService.deposit(userAccount, depositAmount);
+		depoService.deposit(accountIdx, depositAmount);
 		
-		// 입금 후 정보 
-		AccountInfo info = depoService.balanceAfterDeposit(userAccount);
+		// 입금 후 정보 반환
+		AccountInfo info = searchService.getOneAccount(accountIdx);
 		return info;
 	}
 	

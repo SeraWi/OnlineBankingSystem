@@ -23,26 +23,23 @@ public class DepositService {
 	@Autowired
 	private SqlSessionTemplate template;
 
-	//rollback이 안됨!
 	@Transactional(rollbackFor = Exception.class)
-	public void deposit(int userAccount, int depositAmount) {
-		// 계좌와 입금액을 파라미터로 받는다.
+	public void deposit(int accountIdx, int depositAmount) {
 		dao = template.getMapper(Dao.class);
-		try{
-			
-			dao.updateAfterDeposit(userAccount,depositAmount);
-			dao.insertDepositInfo(userAccount,depositAmount);
-		}catch(Exception e) {
-			e.getStackTrace();
-		}
+		/*
+		 * 1. 계좌 잔액 update (입금)
+		 * 2. 잔액 update 한 currentBalance 정보
+		 * 3. 입금 내역 insert
+		 */
+		dao.updateAfterDeposit(accountIdx,depositAmount);
+		int currentBalance = dao.selectCurrentBalance(accountIdx); 
+		dao.insertDepositInfo(accountIdx,depositAmount, currentBalance);
+
 	}
-
-
-
-	public AccountInfo balanceAfterDeposit(int userAccount) {
-		//입금 완료 후 내역 보여주기
-		dao = template.getMapper(Dao.class);
-		AccountInfo info = dao.selectAccountInfo(userAccount);
-		return info;
+	
+	//입금 완료 후 내역 보여주기
+	public AccountInfo balanceAfterDeposit(int accountIdx) {
+		
+		return template.getMapper(Dao.class).selectAccountInfo(accountIdx);
 	}
 }
