@@ -1,9 +1,10 @@
 # OnlineBankingSystem
 Online Banking System 구현하기
 
-* 사용한 기술 스택 : Java8, Spring framework 4.3.18, MySql, JavaScript, jQuery
+* 사용한 기술 스택 : Java8, Spring framework 4.3.18, MySql, JavaScript, jQuery, MyBatis
+* 빌드 툴 : 메이븐
 * DB 테이블: user(사용자정보), account(계좌정보), deposit(입금내역), withdraw(출금내역), transfer(이체내역)
-* MVC패턴으로 개발했습니다.
+* MVC패턴으로 개발
 
 ### 계좌 생성 
 * 랜덤으로 8자리의 중복되지 않는 계좌번호를 생성하였습니다. 
