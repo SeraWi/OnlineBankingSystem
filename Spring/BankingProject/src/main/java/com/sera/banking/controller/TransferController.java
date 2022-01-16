@@ -27,13 +27,12 @@ public class TransferController {
 	@Autowired
 	TransferService tService;
 
-	//이체하기 Get방식으로 : 전체 출금 계좌 보여주기
+	// 전체 출금 계좌 보여주기
 	@RequestMapping("/transfer")
 	public String transfer(
 			HttpServletRequest request,
 			Model model
 			) {
-		// 세션에 저장된 userName 
 		int userIdx = ((UserVo) request.getSession().getAttribute("userVo")).getUserIdx();
 
 		List<AccountInfo> allAccount = searchService.getAllAcountInfo(userIdx);

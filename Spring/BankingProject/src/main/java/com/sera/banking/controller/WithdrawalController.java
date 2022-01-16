@@ -18,7 +18,7 @@ import com.sera.banking.service.WithdrawService;
 
 @Controller
 public class WithdrawalController {
-	// 출금하기
+	// 출금: 특정계좌에서 출금
 
 	@Autowired
 	SearchAccountService searchService;

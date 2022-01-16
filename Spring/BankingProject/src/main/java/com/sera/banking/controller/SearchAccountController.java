@@ -19,12 +19,10 @@ import com.sera.banking.service.SearchAccountService;
 
 @Controller
 public class SearchAccountController {
-	// user가 가지고 있는 모든 계좌 정보 반환
 	//계좌 조회 : User 소유의 전체 계좌에 대한 요약 정보 반환
 	
 	@Autowired
 	private SearchAccountService service;	
-	
 	
 	// 전체 계좌 조회
 	@RequestMapping("/search")
@@ -40,8 +38,6 @@ public class SearchAccountController {
 		List<AccountInfo> allAccount = service.getAllAcountInfo(userIdx);
 		
 		model.addAttribute("allAccount", allAccount);
-		
-		
 		return "/search";
 	}
 	

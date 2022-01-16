@@ -24,7 +24,7 @@ import com.sera.banking.service.SearchAccountService;
 
 public class DepositController {
 	
-	//입금하기
+	//입금: 특정계좌에 입금
 	
 	@Autowired
 	DepositService depoService;

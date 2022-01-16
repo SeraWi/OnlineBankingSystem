@@ -28,7 +28,7 @@ public class DepositService {
 		dao = template.getMapper(Dao.class);
 		/*
 		 * 1. 계좌 잔액 update (입금)
-		 * 2. 잔액 update 한 currentBalance 정보
+		 * 2. 잔액 update 한 currentBalance 정보 select
 		 * 3. 입금 내역 insert
 		 */
 		dao.updateAfterDeposit(accountIdx,depositAmount);

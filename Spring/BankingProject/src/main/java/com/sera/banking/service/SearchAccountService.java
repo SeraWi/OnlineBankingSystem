@@ -23,7 +23,7 @@ public class SearchAccountService {
 		return template.getMapper(Dao.class).selectAllAccount(userIdx);
 	}
 	
-	// 계좌 정보 하나 반환 accountIdx로 검색
+	// 계좌 정보 하나 반환(accountIdx로 검색)
 	public AccountInfo getOneAccount(int accountIdx) {
 		
 		return template.getMapper(Dao.class).selectAccountInfo(accountIdx);

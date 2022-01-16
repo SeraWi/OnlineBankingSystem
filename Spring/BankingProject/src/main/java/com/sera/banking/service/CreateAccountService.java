@@ -29,13 +29,12 @@ public class CreateAccountService {
 		float rate = (float) ((Math.random()*10)+ 0.1); // 0.1%~10.1%까지의 이자율 랜덤 생성
 		rate = Math.min(rate,10); // 최대 10%
 		rate = (float)Math.round(rate *10)/10; // 소수 첫째자리까지 표현
-		System.out.println(rate);
 		
 		// 3. 계좌 생성 (insert) 
 		dao = template.getMapper(Dao.class);
 		int result = dao.insertAccount(userIdx,userName,userAccount,rate);
 		
-		// 4. insert가 성공하면 다시 accountInfo객체를 받아서  반환한다.
+		// 4. insert가 성공하면 다시 accountInfo객체를 받아서  반환
 		AccountInfo info = null;
 		if(result == 1) {
 			info = dao.selectAccountInfo2(userAccount);
